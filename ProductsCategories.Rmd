@@ -1,0 +1,70 @@
+---
+title: "Products by Categories"
+author: "Raquel Rossi"
+date: "2023-02-21"
+---
+
+As usual the sales industry is doing an analysis of how many products we have in stock, and you can help them.
+
+Then your job will display the name and amount of products of each category.
+
+```{r setup, include=FALSE}
+
+library(DBI)
+db <- dbConnect(RSQLite::SQLite(), dbname = "sql.sqlite")
+knitr::opts_chunk$set(connection = "db")
+
+```
+
+```{sql}
+
+CREATE TABLE categories (
+  id numeric PRIMARY KEY,
+  name varchar
+);
+
+```
+
+```{sql}
+
+INSERT INTO categories (id, name)
+VALUES 
+  (1,	'wood'),
+  (2,	'luxury'),
+  (3,	'vintage'),
+  (4,	'modern'),
+  (5,	'super luxury');
+
+```
+
+```{sql}
+
+CREATE TABLE products (
+  id numeric PRIMARY KEY,
+  name varchar(50),
+  amount numeric,
+  price numeric(7,2),
+  id_categories numeric REFERENCES categories (id)
+);
+
+```
+
+```{sql}
+  
+INSERT INTO products (id, name, amount, price, id_categories)
+VALUES 
+  (1,	'Two-doors wardrobe', 100,	800,	1),
+  (2,	'Dining table',	1000,	560,	3),
+  (3,	'Towel holder',	10000,	25.50,	4),
+  (4,	'Computer desk',	350,	320.50,	2),
+  (5,	'Chair',	3000,	210.64,	4),
+  (6,	'Single bed',	750,	460,	1);
+
+```
+
+```{sql}
+
+select categories.name, sum(products.amount) as 'sum' from products
+inner join categories on products.id_categories = categories.id
+group by categories.name;
+```

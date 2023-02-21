@@ -1,0 +1,47 @@
+---
+title: "Providers' City in Alphabetical Order"
+author: "Raquel Rossi"
+date: "2023-02-21"
+---
+
+Every month the company asks for a report from the cities that providers are registered. So, do a query that returns all the cities of the providers, but in alphabetical order.
+
+OBS: You must not show repeated cities.
+
+```{r setup, include=FALSE}
+
+library(DBI)
+db <- dbConnect(RSQLite::SQLite(), dbname = "sql.sqlite")
+knitr::opts_chunk$set(connection = "db")
+
+```
+
+```{sql}
+
+CREATE TABLE providers (
+  id numeric PRIMARY KEY,
+  name varchar(50),
+  street varchar(50),
+  city varchar(50),
+  state varchar(2)
+);
+
+```
+
+```{sql}
+
+INSERT INTO providers (id, name, street, city, state)
+VALUES 
+  (1,	'Henrique',	'Av Brasil',	'Rio de Janeiro',	'RJ'),
+  (2,	'Marcelo Augusto',	'Rua Imigrantes',	'Belo Horizonte',	'MG'),
+  (3,	'Caroline Silva',	'Av São Paulo',	'Salvador',	'BA'),
+  (4,	'Guilerme Staff',	'Rua Central',	'Porto Alegre',	'RS'),
+  (5,	'Isabela Moraes',	'Av Juiz Grande',	'Curitiba',	'PR'),
+  (6,	'Francisco Accerr',	'Av Paulista',	'São Paulo',	'SP');
+
+```
+
+```{sql}
+
+select city from providers order by city asc;
+```
