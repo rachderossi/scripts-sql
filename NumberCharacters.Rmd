@@ -1,0 +1,45 @@
+---
+title: "Number of Characters"
+author: "Raquel Rossi"
+date: "2023-02-26"
+---
+
+The Global Organization of Characters at People’s Names (GOCPN) made a census to figure how many characters people have in theirs names.
+
+To help OMCNP, you must show the number of characters of each name sorted by decreasing number of characters.
+
+
+```{r setup, include=FALSE}
+
+library(DBI)
+db <- dbConnect(RSQLite::SQLite(), dbname = "sql.sqlite")
+knitr::opts_chunk$set(connection = "db")
+```
+
+```{sql}
+
+CREATE TABLE people(
+	id INTEGER PRIMARY KEY,
+	name varchar(255)
+);
+
+```
+
+```{sql}
+
+INSERT INTO people(id, name)
+VALUES 
+      (1, 'Karen'),
+      (2, 'Manuel'),
+      (3, 'Ygor'),
+      (4, 'Valentine'),
+      (5, 'Jo');
+  
+```
+
+```{sql}
+
+select name, length(name) as 'length' from people
+order by length desc;
+
+```
