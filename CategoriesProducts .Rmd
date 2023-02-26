@@ -1,0 +1,72 @@
+---
+title: "Categories with Various Products"
+author: "Raquel Rossi"
+date: "2023-02-26"
+---
+
+The sales industry needs a report to know what products are left in stock.
+
+To help the sales industry, display the product name and category name for products whose amount is greater than 100 and the category ID is 1,2,3,6 or 9. Show the results in ascendent order by category ID.
+
+
+```{r setup, include=FALSE}
+
+library(DBI)
+db <- dbConnect(RSQLite::SQLite(), dbname = "sql.sqlite")
+knitr::opts_chunk$set(connection = "db")
+```
+
+```{sql}
+
+CREATE TABLE categories (
+  id numeric PRIMARY KEY,
+  name varchar(255)
+);
+
+```
+
+```{sql}
+
+INSERT INTO categories (id, name)
+VALUES
+  (1,	'Superior'),
+  (2,	'Super Luxury'),
+  (3,	'Modern'),
+  (4,	'Nerd'),
+  (5,	'Infantile'),
+  (6,	'Robust'),
+  (9,	'Wood');
+  
+```
+
+```{sql}
+
+CREATE TABLE products (
+  id numeric PRIMARY KEY,
+  name varchar (255),
+  amount numeric,
+  price numeric,
+  id_categories numeric REFERENCES categories (id)
+);
+
+```
+
+```{sql}
+
+INSERT INTO products (id, name, amount, price, id_categories)
+VALUES
+  (1,	'Blue Chair',	30, 300.00,	9),
+  (2,	'Red Chair',	200,	2150.00, 2),
+  (3,	'Disney Wardrobe',	400,	829.50,	4),
+  (4,	'Blue Toaster',	20,	9.90,	3),
+  (5,	'Solar Panel',	30,	3000.25,	4);
+  
+```
+
+```{sql}
+
+select products.name, categories.name from categories
+inner join products on products.id_categories = categories.id
+where products.amount > 100 and (categories.id = 1 or categories.id = 2 or categories.id = 3 or categories.id = 6 or categories.id = 9);
+
+```
