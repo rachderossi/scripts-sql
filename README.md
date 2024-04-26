@@ -1,3 +1,3 @@
 # scripts-sql
 
-A journey on learning more about SQL.
+Jornada de aprendizado em SQL.
